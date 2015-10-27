@@ -22,6 +22,7 @@ public class TopGui {
 	private JFrame frame;
 	private JLabel lblCustomerName, lblCompanyName, lblAddress, lblPostCode, lblMobileNo, lblTelNo, lblOrderNo, lblDate;
 	private JTextField txtCustomerName, txtCompanyName, txtAddress, txtPostCode, txtMobileNo, txtTelNo, txtOrderNo;
+	String custName;
 	
 	public TopGui(){
 		buildFrameAndHeader();
@@ -144,8 +145,9 @@ public class TopGui {
 	public JFrame getFrame() {
 		return frame;
 	}
-	public JTextField getTxtCustomerName() {
-		return txtCustomerName;
+	public String getTxtCustomerName() {
+	    custName = txtCustomerName.getText();
+		return custName;
 	}
 	public JTextField getTxtCompanyName() {
 		return txtCompanyName;

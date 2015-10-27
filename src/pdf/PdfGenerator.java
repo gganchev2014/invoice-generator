@@ -3,8 +3,8 @@ package pdf;
 import java.awt.Font;
 import java.io.FileOutputStream;
 
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
@@ -12,17 +12,19 @@ import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+
 import guilogic.BottomGui;
 import guilogic.TopGui;
 
-public class PdfGenerator{
+public class PdfGenerator extends BottomGui{
 
-	private static Document document;
-	private static PdfWriter writer;
+	private Document document;
+	private PdfWriter writer;
 	//	private static com.itextpdf.text.Font calibri = new Font("Calibri", Font.BOLD, 16);
 	static String var;
-	private static TopGui top;
-	private static BottomGui bottom;
+	private TopGui top;
+	public BottomGui bottom;
+	public DefaultTableModel pdfModel;
 
 	public PdfGenerator(){
 		try{
@@ -32,18 +34,17 @@ public class PdfGenerator{
 			document.open();
 			addMetaData(document);
 			addTopSection(document);
-			addTableSection(document, bottom.getModel());
 			document.close();
 		}catch(Exception e){
 			e.printStackTrace();
 		}
 	}
 
-	public static void main(String[] args){
+	/*public static void main(String[] args){
 		new PdfGenerator();
-	}
+	}*/
 
-	private static void addMetaData(Document document){
+	private  void addMetaData(Document document){
 		document.addTitle("test");
 		document.addSubject("");
 		document.addKeywords("");
@@ -51,7 +52,7 @@ public class PdfGenerator{
 		document.addCreator("");
 	}
 
-	private static void addTopSection(Document document) throws DocumentException{
+	private  void addTopSection(Document document) throws DocumentException{
 
 		Font calibri = new Font("Calibri", Font.BOLD, 16);
 		Rectangle rect = writer.getPageSize();
@@ -61,7 +62,7 @@ public class PdfGenerator{
 		table.setTotalWidth(1070);
 		table.getDefaultCell().setBorder(Rectangle.NO_BORDER);
 		table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_LEFT);
-		table.addCell("Customer Name:  ");
+		table.addCell("Customer Name:  " + top.getTxtCustomerName());
 		table.addCell(" ");
 		table.addCell("Mobile Number:  ");
 		table.addCell("Company Name: ");
@@ -79,12 +80,19 @@ public class PdfGenerator{
 		table.addCell(" ");
 		table.addCell(" ");
 		table.addCell("Date: ");
-
-		//	 table.writeSelectedRows(0, -1, rect.getLeft(30), rect.getTop(20), writer.getDirectContent());
+		
 		document.add(table);
+		addTableSection(document);
 	}
 
-	public  void addTableSection(Document document, DefaultTableModel model){
+	public  void addTableSection(Document document){
+		try {
+			document.add(pdfTable);
+		} catch (DocumentException e) {
+			e.printStackTrace();
+		}
+	}
+	/*public  void addTableSection(Document document, DefaultTableModel model){
 
 		PdfPTable pdfTable = new PdfPTable(model.getColumnCount());
 
@@ -105,6 +113,10 @@ public class PdfGenerator{
 		} catch(NullPointerException e){
 			e.printStackTrace();
 		} 
+	}
+	*/
+	public DefaultTableModel pdfModel(){
+		return pdfModel;
 	}
 
 }

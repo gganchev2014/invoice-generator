@@ -18,9 +18,15 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.pdf.PdfPTable;
+
 import pdf.PdfGenerator;
 
-public class BottomGui {
+
+public class BottomGui{
 
 	private JFrame popUpFrame;
 	private JLabel quantityValue;
@@ -36,8 +42,9 @@ public class BottomGui {
 	private JButton buttonPrint;
 	List<String> data = new ArrayList<String>();
 	PdfGenerator pdf;
+	protected PdfPTable pdfTable ;
 
-	public BottomGui(){
+	public BottomGui() {
 		buildTableForm();
 		buildPopupFrame();
 	}
@@ -109,6 +116,7 @@ public class BottomGui {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				addTableSection(model);
 				new PdfGenerator();
 			}
 
@@ -223,16 +231,29 @@ public class BottomGui {
 			}
 		});
 	}
+	
+	public  void addTableSection(DefaultTableModel model){
 
+	pdfTable = new PdfPTable(model.getColumnCount());
+
+		for (int i = 0; i < model.getColumnCount(); i++){
+			pdfTable.addCell(model.getColumnName(i));
+		}
+
+		for (int rows = 0; rows < model.getRowCount(); rows++){
+			for (int columns = 0; columns <model.getColumnCount(); columns++){
+				pdfTable.addCell(model.getValueAt(rows, columns).toString());
+			}
+		}
+	}
+	
 	public JButton getButtonAdd() {
 		return buttonAdd;
 	}
 
-
 	public JTextField getTxtDescription() {
 		return txtDescription;
 	}
-
 
 	public JTextField getTxtPrice() {
 		return txtPrice;
@@ -245,8 +266,8 @@ public class BottomGui {
 		return table;
 	}
 	
-	public List<String> getData(){
-		return data;
+	public  PdfPTable getPTable(){
+		return pdfTable;
 	}
 
 }
